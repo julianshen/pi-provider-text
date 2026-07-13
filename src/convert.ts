@@ -61,7 +61,10 @@ function fromAssistant(message: AssistantMessage): ModelMessage {
 		// Thinking blocks are intentionally dropped: OpenAI-compatible chat
 		// endpoints do not accept prior reasoning content as input.
 	}
-	return { role: "assistant", content: parts.length > 0 ? parts : "" };
+	// Fall back to a single space rather than "" — a message that carried only
+	// thinking blocks would otherwise be empty, and some strict OpenAI-compatible
+	// endpoints reject empty assistant content.
+	return { role: "assistant", content: parts.length > 0 ? parts : " " };
 }
 
 function fromToolResult(message: ToolResultMessage): ModelMessage {
