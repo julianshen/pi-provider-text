@@ -54,7 +54,7 @@ Set environment variables before starting pi (see [`.env.example`](./.env.exampl
 | --- | --- | --- | --- |
 | `PI_TEXT_BASE_URL` | ✅ | — | OpenAI-compatible base URL, usually ending in `/v1`. |
 | `PI_TEXT_API_KEY` | ✅¹ | — | API key, sent as `Authorization: Bearer <key>`. |
-| `PI_TEXT_MODELS` | ✅ | — | Comma-separated model ids. Each entry may be `id` or `id:Display Name`. |
+| `PI_TEXT_MODELS` | ✅ | — | Comma-separated model ids. Each entry may be `id` or `id=Display Name`. Use `=` (not `:`) so ids with colons — e.g. Ollama tags like `qwen2.5-coder:7b` — stay intact. |
 | `PI_TEXT_MODEL` | — | — | Single-model alias, used only if `PI_TEXT_MODELS` is unset. |
 | `PI_TEXT_API_KEY_ENV` | — | `PI_TEXT_API_KEY` | Name of the env var holding the key. |
 | `PI_TEXT_PROVIDER_ID` | — | `text` | Provider key shown in `/model`. |
@@ -76,7 +76,7 @@ stays inert.
 ```bash
 export PI_TEXT_BASE_URL="http://localhost:1234/v1"
 export PI_TEXT_API_KEY="lm-studio"
-export PI_TEXT_MODELS="qwen2.5-coder-7b:Qwen2.5 Coder 7B"
+export PI_TEXT_MODELS="qwen2.5-coder:7b=Qwen2.5 Coder 7B"
 pi
 # then: /model  ->  pick "Custom Text Provider"
 ```

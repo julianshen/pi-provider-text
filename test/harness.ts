@@ -147,13 +147,16 @@ async function main() {
 		const cfg = loadConfigFromEnv({
 			PI_TEXT_BASE_URL: "https://api.example.com/v1",
 			PI_TEXT_API_KEY: "secret",
-			PI_TEXT_MODELS: "model-a, model-b:Model B Pro",
+			PI_TEXT_MODELS: "qwen2.5-coder:7b, model-b=Model B Pro",
 			PI_TEXT_PROVIDER_ID: "mytext",
 		});
 		assert(cfg !== null, "config parsed");
 		assert(cfg!.providerId === "mytext", "provider id honored");
 		assert(cfg!.apiKeyRef === "$PI_TEXT_API_KEY", "apiKey reference built");
 		assert(cfg!.models.length === 2 && cfg!.models[1].name === "Model B Pro", "models + display names parsed");
+		// Regression: colons in the model id (ollama-style tags) must not be split.
+		assert(cfg!.models[0].id === "qwen2.5-coder:7b", `colon-in-id preserved (${cfg!.models[0].id})`);
+		assert(cfg!.models[0].name === "qwen2.5-coder:7b", "colon-in-id defaults name to full id");
 		assert(loadConfigFromEnv({}) === null, "empty env => null (inert)");
 		assert(loadConfigFromEnv({ PI_TEXT_MODELS: "x" }) === null, "models without base url => null");
 

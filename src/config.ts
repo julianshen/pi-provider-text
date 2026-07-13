@@ -58,8 +58,12 @@ function parseHeaders(raw: string | undefined): Record<string, string> | undefin
 }
 
 /**
- * Parse a comma-separated model spec. Each entry is `id` or `id:Display Name`.
- *   "gpt-oss-120b, my-model:My Model"
+ * Parse a comma-separated model spec. Each entry is `id` or `id=Display Name`.
+ *   "gpt-oss-120b, my-model=My Model"
+ *
+ * `=` (not `:`) separates the id from the display name so that model ids which
+ * legitimately contain colons — e.g. Ollama tags like `qwen2.5-coder:7b` — are
+ * preserved intact.
  */
 function parseModels(raw: string | undefined): { id: string; name: string }[] {
 	const t = trimmed(raw);
@@ -68,7 +72,7 @@ function parseModels(raw: string | undefined): { id: string; name: string }[] {
 	for (const chunk of t.split(",")) {
 		const entry = chunk.trim();
 		if (!entry) continue;
-		const sep = entry.indexOf(":");
+		const sep = entry.indexOf("=");
 		if (sep > 0) {
 			const id = entry.slice(0, sep).trim();
 			const name = entry.slice(sep + 1).trim();
@@ -88,7 +92,7 @@ function parseModels(raw: string | undefined): { id: string; name: string }[] {
  * Recognized variables:
  *   PI_TEXT_BASE_URL       (required) OpenAI-compatible base URL, e.g. https://api.example.com/v1
  *   PI_TEXT_API_KEY        (required for authed endpoints) API key; sent as `Authorization: Bearer`
- *   PI_TEXT_MODELS         (required) comma-separated model ids, entries may be `id:Display Name`
+ *   PI_TEXT_MODELS         (required) comma-separated model ids, entries may be `id=Display Name`
  *   PI_TEXT_MODEL          alias for a single model id (used if PI_TEXT_MODELS is unset)
  *   PI_TEXT_API_KEY_ENV    name of the env var holding the key (default: PI_TEXT_API_KEY)
  *   PI_TEXT_PROVIDER_ID    provider key shown in `/model` (default: "text")
