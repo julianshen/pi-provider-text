@@ -1,0 +1,36 @@
+{
+  "name": "pi-provider-text",
+  "version": "0.1.0",
+  "description": "Pi coding-agent extension that registers a URL + API-key OpenAI-compatible text provider, using @ai-sdk/openai-compatible for protocol handling.",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "pi",
+    "pi-agent",
+    "coding-agent",
+    "extension",
+    "provider",
+    "openai-compatible",
+    "ai-sdk"
+  ],
+  "pi": {
+    "extensions": [
+      "./src/index.ts"
+    ]
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types test/harness.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/openai-compatible": "^3.0.7",
+    "ai": "^7.0.22"
+  },
+  "devDependencies": {
+    "@earendil-works/pi-ai": "^0.80.6",
+    "@earendil-works/pi-coding-agent": "^0.80.6",
+    "@types/node": "^22.20.1",
+    "typebox": "^1.1.38",
+    "typescript": "^5.6.0"
+  }
+}
